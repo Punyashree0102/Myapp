@@ -2,6 +2,13 @@ pipeline {
     agent any
 
     stages {
+
+        stage('Clean Workspace') {
+            steps {
+                deleteDir()
+            }
+        }
+
         stage('Clone') {
             steps {
                 git branch: 'main', url: 'https://github.com/Punyashree0102/Myapp.git'
@@ -16,7 +23,8 @@ pipeline {
 
         stage('Run Container') {
             steps {
-                sh 'docker run -d -p 3000:3000 myapp'
+                sh 'docker rm -f myapp || true'
+                sh 'docker run -d -p 3000:3000 --name myapp myapp'
             }
         }
     }
